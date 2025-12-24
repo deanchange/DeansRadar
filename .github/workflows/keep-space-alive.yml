@@ -1,0 +1,23 @@
+name: Keep HuggingFace Space Alive
+
+on:
+  schedule:
+    # 每 2 小时运行一次（UTC 时间）
+    # 中国时间 = UTC + 8，比如 cron '0 */2 * * *' 表示 0,2,4,6,8,10,12,14,16,18,20,22 点（UTC）
+    - cron: '0 */6 * * *'
+  
+  # 也支持手动触发（方便测试）
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Ping HuggingFace Space
+        run: |
+          curl -X GET https://trendradar.hf.space/
+          
+      - name: 记录日志
+        run: |
+          echo "Ping 时间: $(date)"
