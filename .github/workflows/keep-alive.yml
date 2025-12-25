@@ -1,0 +1,36 @@
+name: Keep HuggingFace Space Alive
+
+on:
+  schedule:
+    # 每6小时运行一次
+    - cron: '0 */6 * * *'
+  workflow_dispatch:  # 允许手动触发测试
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Install huggingface_hub
+        run: pip install huggingface_hub
+      
+      - name: Restart HuggingFace Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          python << 'EOF'
+          from huggingface_hub import HfApi
+          import os
+
+          token = os.environ.get("HF_TOKEN")
+          api = HfApi(token=token)
+          
+          # 修改下面这行，填入你的 Space 名称
+          space_id = "deanchange/DeansRadar"
+          
+          try:
+              api.restart_space(repo_id=space_id)
+              print(f"✅ Successfully restarted space: {space_id}")
+          except Exception as e:
+              print(f"❌ Error: {e}")
+          EOF
