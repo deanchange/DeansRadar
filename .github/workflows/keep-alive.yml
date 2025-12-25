@@ -26,7 +26,7 @@ jobs:
           api = HfApi(token=token)
           
           # 修改下面这行，填入你的 Space 名称
-          space_id = "deanchange/DeansRadar"
+          space_id = "hongmiao/trendradar"
           
           try:
               api.restart_space(repo_id=space_id)
